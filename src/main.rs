@@ -4,11 +4,12 @@ use std::io::BufRead;
 use std::io::BufReader;
 use std::io::BufWriter;
 
+extern crate clap;
+use clap::App;
+use clap::Arg;
+
 extern crate regex;
 use regex::Regex;
-
-extern crate csv;
-use csv::Writer;
 
 struct LinkerSymbol {
     name: String,
@@ -28,22 +29,35 @@ impl LinkerSymbol {
 
 fn main() {
 
-    let f = File::open("bootloader.map").unwrap();
-    let mut reader = BufReader::new(&f);
+    let args = App::new("armlink map chartist")
+        .version("0.1")
+        .author("amomum")
+        .about("A simple parser of armlink map file. \
+        Primary usage is code-size optimization - you will be able to find out what functions should take the blame.")
+        .arg( Arg::with_name("map file")
+        .index(1)
+        .required(true)
+        .help("Input linker map file"))
+        .get_matches();
+
+    let file_name = args.value_of("map file").unwrap();
+    let f = File::open(file_name).unwrap();
+
+    let reader = BufReader::new(&f);
 
     // searching for the segment with function sizes
     let mut line_iter = reader.lines();
 
-    let start_pos = line_iter.position( |x| x.unwrap().contains("Symbol Name                              Value     Ov Type        Size  Object(Section)"));
+    line_iter.position( |x| x.unwrap().contains("Symbol Name                              Value     Ov Type        Size  Object(Section)"));
 
     // parsing this shit
 
     let mut linker_symbols: Vec<Box<LinkerSymbol>> = Vec::new();
 
-    let regex_addr = Regex::new(r"\s0[xX][0-9a-fA-F]+").unwrap();
+    //let regex_addr = Regex::new(r"\s0[xX][0-9a-fA-F]+").unwrap();
     let regex_func_name = Regex::new(r".*?(?:0x)").unwrap();
     let regex_size = Regex::new(r"\s\d+\s").unwrap();
-    let regex_obj_file = Regex::new(r"\w+.o").unwrap();
+    let regex_obj_file = Regex::new(r"\w+[.][o]").unwrap();
 
     while line_iter.next().is_some() {
         // end of section
@@ -95,7 +109,7 @@ fn main() {
 
 
     // write them to file with TAB as a separator since both comma and space could be inside function names
-    let mut file = File::create("result.txt").unwrap();
+    let file = File::create("result.txt").unwrap();
     let mut writer = BufWriter::new(&file);
 
     for symbol in linker_symbols {
