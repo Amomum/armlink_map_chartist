@@ -2,6 +2,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufRead;
 use std::io::BufReader;
+use std::io::BufWriter;
 
 extern crate regex;
 use regex::Regex;
@@ -9,41 +10,100 @@ use regex::Regex;
 extern crate csv;
 use csv::Writer;
 
+struct LinkerSymbol {
+    name: String,
+    object_file: String,
+    size: u32,
+}
+
+impl LinkerSymbol {
+    pub fn new() -> LinkerSymbol {
+        LinkerSymbol {
+            name: String::new(),
+            object_file: String::new(),
+            size: 0,
+        }
+    }
+}
+
 fn main() {
-    // let mut file = File::create("bar.txt").unwrap();
-    // file.write_all(b"Hello world\n").unwrap();
-    // file.write_all(b"Or not?").unwrap();
 
-    // let f = File::open("bar.txt").unwrap();
-    // let buf = BufReader::new(&f);
+    let f = File::open("bootloader.map").unwrap();
+    let mut reader = BufReader::new(&f);
 
-    // for line in buf.lines() {
-    //     println!("{}", line.unwrap());
-    // }
+    // searching for the segment with function sizes
+    let mut line_iter = reader.lines();
 
-    //let exmpl = "TIM_SetCompare4                          0x08004fb1   Thumb Code    58  stm32f4xx_tim.o(i.TIM_SetCompare4)";
-    let exmpl = "tasks::JackRecorderTask_t::getMaxTriple(tasks::JackRecorderTask_t::Triple&, const short*, unsigned) 0x080057dd   Thumb Code   122  jack_recorder.o(i._ZN5tasks18JackRecorderTask_t12getMaxTripleERNS0_6TripleEPKsj)";
+    let start_pos = line_iter.position( |x| x.unwrap().contains("Symbol Name                              Value     Ov Type        Size  Object(Section)"));
 
-    // mathes all the text before the first hex number - that's supposed to be a function prototype
-    let re = Regex::new(r".*?(?:0x)").unwrap();
-    let caps = re.captures(exmpl).unwrap();
+    // parsing this shit
 
-    // unfortunately I couldn't craft ideal regexp so I have to remove the traling "0x" like that
-    let funcname = caps.get(0).unwrap().as_str().trim_right_matches("0x");
+    let mut linker_symbols: Vec<Box<LinkerSymbol>> = Vec::new();
 
-    println!("{}", funcname);
+    let regex_addr = Regex::new(r"\s0[xX][0-9a-fA-F]+").unwrap();
+    let regex_func_name = Regex::new(r".*?(?:0x)").unwrap();
+    let regex_size = Regex::new(r"\s\d+\s").unwrap();
+    let regex_obj_file = Regex::new(r"\w+.o").unwrap();
 
-    let address = Regex::new(r"\s0[xX][0-9a-fA-F]+").unwrap().captures(exmpl).unwrap().get(0).unwrap().as_str().trim();
+    while line_iter.next().is_some() {
+        // end of section
+        let line = line_iter.next().unwrap().unwrap();
+        if line.contains("==============================================================================") { 
+            break;
+        }
 
-    println!("{}", address);
+        if !line.contains("Thumb Code") {
+            continue;
+        }
 
-    let size = Regex::new(r"\s\d+\s").unwrap().captures(exmpl).unwrap().get(0).unwrap().as_str().trim();
+        let mut symbol = Box::new(LinkerSymbol::new());
+        let line_str = line.as_str();
+        // unfortunately I couldn't craft ideal regexp so I have to remove the traling "0x" like that
+        symbol.name = regex_func_name
+            .captures(line_str)
+            .unwrap()
+            .get(0)
+            .unwrap()
+            .as_str()
+            .trim_right_matches("0x")
+            .to_string();
 
-    println!("{}", size);
+        symbol.size = regex_size
+            .captures(line_str)
+            .unwrap()
+            .get(0)
+            .unwrap()
+            .as_str()
+            .trim()
+            .parse::<u32>()
+            .unwrap();
 
-    let mut writer = csv::Writer::from_file("test.cvs").unwrap();
-    let res = writer.encode( (funcname, size, address) );
+        symbol.object_file = regex_obj_file
+            .captures(line_str)
+            .unwrap()
+            .get(0)
+            .unwrap()
+            .as_str()
+            .to_string();
 
-    assert!(res.is_ok());
+        linker_symbols.push(symbol);
+    }
 
+    // sort results by size - coz that's what I'm mostly interested in
+    linker_symbols.sort_by(|a, b| a.size.cmp(&b.size));
+    linker_symbols.reverse();
+
+
+    // write them to file with TAB as a separator since both comma and space could be inside function names
+    let mut file = File::create("result.txt").unwrap();
+    let mut writer = BufWriter::new(&file);
+
+    for symbol in linker_symbols {
+        writeln!(&mut writer,
+                 "{}\t{}\t{}",
+                 symbol.name,
+                 symbol.size,
+                 symbol.object_file)
+                .unwrap();
+    }
 }

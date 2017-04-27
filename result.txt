@@ -1,0 +1,118 @@
+    USART_Init                               	424	stm32f30x_usart.o
+    uart::Handle::uartInitHelper(uart::Handle::UartSettings&) 	242	uart_handle.o
+    uart::Handle::irqHandler()               	238	uart_handle.o
+    flashing::Flasher_stm32f3	220	writeBlo
+    uart_messages::UartBusMessageReceiver::receiveMessage(unsigned char*, unsigned char) 	174	uart_bus_message_receiver.o
+    deInitAll()                              	162	main.o
+    uart::Handle::teardown()                 	158	teardo
+    bootloader_core::Loader::receivedFirmwareCrcCheck(unsigned char*, unsigned char) 	154	bootloader_co
+    FLASH_ProgramWord                        	128	FLASH_ProgramWo
+    uart::Handle::Handle()                   	126	uart_handle.o
+    bootloader_core::Loader::receivedDataChunk(unsigned char*, unsigned) 	112	bootloader_co
+    CircularBuffer<unsigned char, (unsigned)255>::writeHead(unsigned char) volatile 	110	uart_handle.o
+    uart::Handle::initExtended(uart::RxPins, uart::TxPins, USART_InitTypeDef&, GPIO_TypeDef*, unsigned short, bool, unsigned char) 	102	sho
+    gpioToRcc(GPIO_TypeDef*)                 	100	gpioTo
+    uart::Handle::sendLocalArray(const unsigned char*, unsigned) 	94	sendLo
+    uart::Handle::reset()                    	92	uart_handle.o
+    uart_messages::tx_messages::wrapMsg(unsigned char*, unsigned char, unsigned char) 	88	uart_bus_message_sender.o
+    uart_messages::BusSender::sendGuarantedMsg() 	88	uart_bus_message_sender.o
+    bootloader_core::Loader::receivedFwSize(unsigned char*, unsigned char) 	88	bootloader_co
+    RCC_DeInit                               	84	stm32f30x_rcc.o
+    util::MemberCallbackFactory2<void, bootloader_core::Loader, unsigned char*, unsigned>::Wrapper<(&bootloader_core::Loader::operate)>(const void*, unsigned char*, unsigned) 	80	MemberCallbackFacto
+    uart::Handle::getByte()                  	74	uart_handle.o
+    flashing::Flasher_stm32f3	74	flasher_stm32f30x.o
+    RCC_AHBPeriphClockCmd                    	70	RCC_AHBPeriphClo
+    umba_crc16                               	62	umba_crc16.o
+    umba_crc8                                	56	umba_crc8.o
+    uart::Handle::disableReceiver()          	48	uart_handle.o
+    bootloader_core::Loader::receivedStartFirmware() 	44	bootloader_co
+    flashing::Flasher_stm32f3	40	flasher_stm32f30x.o
+    FLASH_WaitForLastOperation               	38	FLASH_WaitForLastOperatio
+    uart_messages::BusSender::repeatLastMsg() 	34	uart_bus_message_sender.o
+    systemReset()                            	34	main.o
+    __scatterload                            	28	__scatterlo
+    bootloader_core::Loader::guarantedAnswerOk() 	28	bootloader_co
+    bootloader_core::common::charArrToInt(unsigned char*) 	28	bootloader_co
+    __cpp_initialize__aeabi_                 	22	cpp_init.o
+    uart::Handle::isReceiverOverrun()        	22	uart_handle.o
+    uart::Handle::lock()                     	22	uart_handle.o
+    GPIO_StructInit                          	22	stm32f30x_gpio.o
+    util::Callback<void(unsigned char*, unsigned)>::operator ()(unsigned char*, unsigned) const 	20	operato
+    util::FreeCallbackFactory2<void, unsigned char*, unsigned char>::Wrapper<(&onMsgComposed)>(const void*, unsigned char*, unsigned char) 	18	FreeCallbackFacto
+    util::FreeCallbackFactory0<void>::Bind<(&deInitAll)>() 	18	FreeCallbackFacto
+    _memset$wrapper                          	18	memseta.o
+    uart::Handle::enableTransmit485()        	18	uart_handle.o
+    TimeService::deInit()                    	18	time_service.o
+    NVIC_DisableIRQ(IRQn)                    	18	main.o
+    __aeabi_memset                           	14	memseta.o
+    FLASH_Lock                               	14	FLASH_Lo
+    flashing::Flasher_stm32f3	14	flasher_stm32f30x.o
+    SysTick_Handler                          	12	time_service.o
+    bootloader_core::Loader::receivedEcho()  	12	bootloader_co
+    util::FreeCallbackFactory0<void>::Wrapper<(&deInitAll)>(const void*) 	10	FreeCallbackFacto
+    flashing::Flasher_stm32f3	10	flasher_stm32f30x.o
+    __sti___15_uart_handle_cpp               	10	uart_handle.o
+    boot_jump(unsigned)                      	8	boo
+    __cxa_pure_virtual                       	6	pure_virt.o
+    uart::TxPins::operator uart::TxPins::Type() const 	6	operato
+    bootloader_core::Loader::States::operator bootloader_core::Loader::States::Type() const 	6	bootloader_co
+    uart_messages::BusSender::setCurrentMessageCount(unsigned char) 	6	setCurrentMessageCo
+    __aeabi_atexit                           	4	main.o
+    util::GetCallbackFactory<void>(T1(*)())  	2	GetCallbackFacto
+    __scatterload_null                       	2	__scatterlo
+    DebugMon_Handler                         	2	DebugMo
+    UsageFault_Handler                       	2	startup_stm32f303xc.o
+    MemManage_Handler                        	2	startup_stm32f303xc.o
+    NMI_Handler                              	2	startup_stm32f303xc.o
+    util::Callback<void()>::Callback__sub_object() 	0	Callback__sub_o
+    util::Callback<void()>::Callback__sub_object(const util::Callback<void()>&) 	0	Callback__sub_o
+    util::Callback<void()>::Callback__sub_object(void(*)(const void*), const void*) 	0	Callback__sub_o
+    flashing::Flasher_stm32f3	0	Flasher_stm32f30x__sub_o
+    flashing::Flasher_stm32f3	0	Flasher_stm32f30x__sub_o
+    uart::Handle::UartSettings::UartSettings__sub_object() 	0	UartSettings__sub_o
+    bootloader_core::Loader::~Loader__sub_object() 	0	bootloader_co
+    bootloader_core::Loader::States::States__sub_object(bootloader_core::Loader::States::Type) 	0	bootloader_co
+    uart_messages::UartBusMessageReceiver::~UartBusMessageReceiver__sub_object() 	0	UartBusMessageReceiver__sub_o
+    uart_messages::UartBusMessageComposer::~UartBusMessageComposer__sub_object() 	0	UartBusMessageCompo
+    uart_messages::UartBusMessageComposer::States::States__sub_object(uart_messages::UartBusMessageComposer::States::Type) 	0	UartBusMessageCompo
+    __aeabi_memclr4                          	0	memseta.o
+    __aeabi_memset8                          	0	memseta.o
+    __aeabi_memcpy4                          	0	memcpya.o
+    WWDG_IRQHandler                          	0	startup_stm32f303xc.o
+    USB_LP_CAN1_RX0_IRQHandler               	0	startup_stm32f303xc.o
+    USB_HP_CAN1_TX_IRQHandler                	0	startup_stm32f303xc.o
+    USBWakeUp_IRQHandler                     	0	startup_stm32f303xc.o
+    USART1_IRQHandler                        	0	startup_stm32f303xc.o
+    UART4_IRQHandler                         	0	startup_stm32f303xc.o
+    TIM8_TRG_COM_IRQHandler                  	0	startup_stm32f303xc.o
+    TIM8_BRK_IRQHandler                      	0	startup_stm32f303xc.o
+    TIM6_DAC_IRQHandler                      	0	startup_stm32f303xc.o
+    TIM3_IRQHandler                          	0	startup_stm32f303xc.o
+    TIM1_UP_TIM16_IRQHandler                 	0	startup_stm32f303xc.o
+    TIM1_CC_IRQHandler                       	0	startup_stm32f303xc.o
+    TAMPER_STAMP_IRQHandler                  	0	startup_stm32f303xc.o
+    SPI2_IRQHandler                          	0	startup_stm32f303xc.o
+    RTC_WKUP_IRQHandler                      	0	startup_stm32f303xc.o
+    RCC_IRQHandler                           	0	startup_stm32f303xc.o
+    I2C2_EV_IRQHandler                       	0	startup_stm32f303xc.o
+    I2C1_EV_IRQHandler                       	0	startup_stm32f303xc.o
+    FPU_IRQHandler                           	0	startup_stm32f303xc.o
+    EXTI9_5_IRQHandler                       	0	startup_stm32f303xc.o
+    EXTI3_IRQHandler                         	0	startup_stm32f303xc.o
+    EXTI1_IRQHandler                         	0	startup_stm32f303xc.o
+    EXTI0_IRQHandler                         	0	startup_stm32f303xc.o
+    DMA2_Channel4_IRQHandler                 	0	startup_stm32f303xc.o
+    DMA2_Channel2_IRQHandler                 	0	startup_stm32f303xc.o
+    DMA1_Channel7_IRQHandler                 	0	startup_stm32f303xc.o
+    DMA1_Channel5_IRQHandler                 	0	startup_stm32f303xc.o
+    DMA1_Channel3_IRQHandler                 	0	startup_stm32f303xc.o
+    DMA1_Channel1_IRQHandler                 	0	startup_stm32f303xc.o
+    COMP4_5_6_IRQHandler                     	0	startup_stm32f303xc.o
+    CAN1_SCE_IRQHandler                      	0	startup_stm32f303xc.o
+    ADC4_IRQHandler                          	0	startup_stm32f303xc.o
+    ADC1_2_IRQHandler                        	0	startup_stm32f303xc.o
+    __rt_final_cpp                           	0	entry10a.o
+    _main_cpp_init                           	0	entry8b.o
+    _main_clock                              	0	_main_clo
+    _main_scatterload                        	0	_main_scatterlo
+    __main                                   	0	entry.o
