@@ -14,13 +14,15 @@ use regex::Regex;
 struct LinkerSymbol {
     name: String,
     object_file: String,
-    size: u32,
+    size: u32, 
+    //adr: u32,
 }
 
 impl LinkerSymbol {
     pub fn new() -> LinkerSymbol {
         LinkerSymbol {
             name: String::new(),
+            //adr: 0,
             object_file: String::new(),
             size: 0,
         }
@@ -55,13 +57,19 @@ fn main() {
     let mut linker_symbols: Vec<Box<LinkerSymbol>> = Vec::new();
 
     //let regex_addr = Regex::new(r"\s0[xX][0-9a-fA-F]+").unwrap();
-    let regex_func_name = Regex::new(r".*?(?:0x)").unwrap();
+    let regex_func_name = Regex::new(r".*?(?:\s0x)").unwrap();
     let regex_size = Regex::new(r"\s\d+\s").unwrap();
     let regex_obj_file = Regex::new(r"\w+[.][o]").unwrap();
 
-    while line_iter.next().is_some() {
+    let line_iter = line_iter.enumerate();
+
+    for (_, line) in line_iter {
         // end of section
-        let line = line_iter.next().unwrap().unwrap();
+
+        let line = line.unwrap();
+
+        //println!("{} : {}", i, line.as_str());
+
         if line.contains("==============================================================================") { 
             break;
         }
@@ -69,6 +77,8 @@ fn main() {
         if !line.contains("Thumb Code") {
             continue;
         }
+
+        //println!("----- Line accepted");
 
         let mut symbol = Box::new(LinkerSymbol::new());
         let line_str = line.as_str();
@@ -100,6 +110,16 @@ fn main() {
             .as_str()
             .to_string();
 
+        // let t = regex_addr
+        //     .captures(line_str)
+        //     .unwrap()
+        //     .get(0)
+        //     .unwrap()
+        //     .as_str()
+        //     .trim();
+
+        // symbol.adr = u32::from_str_radix(&t[2..], 16).unwrap();
+
         linker_symbols.push(symbol);
     }
 
@@ -107,6 +127,10 @@ fn main() {
     linker_symbols.sort_by(|a, b| a.size.cmp(&b.size));
     linker_symbols.reverse();
 
+    println!("Code size: {}",
+             linker_symbols
+                 .iter()
+                 .fold(0u32, |sum, symbol| sum + symbol.size));
 
     // write them to file with TAB as a separator since both comma and space could be inside function names
     let file = File::create("result.txt").unwrap();
