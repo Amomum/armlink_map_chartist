@@ -1,5 +1,5 @@
 [root]
-name = "simple_rust_test"
+name = "armlink_map_chartist"
 version = "0.1.0"
 dependencies = [
  "clap 2.23.3 (registry+https://github.com/rust-lang/crates.io-index)",
